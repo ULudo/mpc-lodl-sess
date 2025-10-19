@@ -1,0 +1,53 @@
+out_dir: "./out"
+name: "mpc_single_net_predictor_recurrent"
+n_eval_runs: 1
+data:
+  datasets:
+    - name: "opsd_building_6"
+      house_data_file: "./res/data/opsd_building_6.csv"
+      price_data_column: 'germany'
+  price_data_file: "./res/data/ee_prices.csv"
+  data_format: "csv"
+model:
+  name: 'mpc'
+  mpc_type: 'single_net_predictor'
+  predictor:
+    predictor_type: 'recurrent_net'
+    predictor_path: './out/predictor/lodl/20250512_085751/predictor.pkl'
+    scaler_path: './out/predictor/lodl/20250512_085751/scaler.pkl'
+    two_d: False
+    kwargs:
+      input_size: 9
+      output_size: 288 # 96 * 3
+      early_stopping: True
+      epochs: 200
+      batches_per_epoch: 500
+      val_batches: 50
+      noise_std: 0.0
+      scale_std: 0.0
+      rnn_type: 'LSTM'
+      hidden_units: 256
+      num_layers: 4
+      dropout: 0.3
+      learning_rate: 0.0008
+      batch_size: 256
+      seed: 42
+      verbose: True
+      device: 'cuda'
+  history_length: 96
+  prediction_length: 96
+environment:
+  battery:
+    efficiency: 0.95
+    capacity: 20000
+    max_power: 8000
+  scaling_method: "none"
+  random_time_init: false
+  init_time: 1514761200
+  episode_length: 8377200
+  action_space_type: "continuous"
+  tax: 20
+  prediction_horizon: 0
+  dataset_args:
+    building: "opsd_building_6"
+    price: "germany"

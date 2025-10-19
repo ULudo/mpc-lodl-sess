@@ -1,0 +1,190 @@
+out_dir: "./out/predictor"
+name: "lodl"
+data:
+  datasets:
+    - house_data_file: './res/data/opsd_building_1.csv'
+      name: 'opsd_building_1'
+    - house_data_file: './res/data/opsd_building_3.csv'
+      name: 'opsd_building_3'
+    - house_data_file: './res/data/opsd_building_4.csv'
+      name: 'opsd_building_4'
+    - house_data_file: './res/data/opsd_building_6.csv'
+      name: 'opsd_building_6'
+  price_data_file: './res/data/ee_prices.csv'
+  data_format: 'csv'
+  label:
+    - 'load'
+    - 'pv'
+    - 'price'
+  building:
+    eval:
+      - name: 'opsd_building_6'
+        periods:
+          - start_date: 1498860000
+            end_date: 1514760300
+    test:
+      - name: 'opsd_building_6'
+        periods:
+          - start_date: 1514761200
+            end_date: 1523224800
+  price:
+    eval:
+      - name: 'belgium'
+        periods:
+          - start_date: 1498860000
+            end_date: 1514760300
+      - name: 'denmark_west'
+        periods:
+          - start_date: 1498860000
+            end_date: 1514760300
+      - name: 'denmark_east'
+        periods:
+          - start_date: 1498860000
+            end_date: 1514760300
+      - name: 'france'
+        periods:
+          - start_date: 1498860000
+            end_date: 1514760300
+      - name: 'netherlands'
+        periods:
+          - start_date: 1498860000
+            end_date: 1514760300
+      - name: 'norway'
+        periods:
+          - start_date: 1498860000
+            end_date: 1514760300
+      - name: 'sweden'
+        periods:
+          - start_date: 1498860000
+            end_date: 1514760300
+      - name: 'switzerland'
+        periods:
+          - start_date: 1498860000
+            end_date: 1514760300
+      - name: 'czech_republic'
+        periods:
+          - start_date: 1498860000
+            end_date: 1514760300
+      - name: 'germany'
+        periods:
+          - start_date: 1498860000
+            end_date: 1514760300
+      - name: 'italy'
+        periods:
+          - start_date: 1498860000
+            end_date: 1514760300
+      - name: 'slovenia'
+        periods:
+          - start_date: 1498860000
+            end_date: 1514760300
+      - name: 'hungary'
+        periods:
+          - start_date: 1498860000
+            end_date: 1514760300
+    test:
+      - name: 'belgium'
+        periods:
+          - start_date: 1514761200
+            end_date: 1523224800
+      - name: 'denmark_west'
+        periods:
+          - start_date: 1514761200
+            end_date: 1523224800
+      - name: 'denmark_east'
+        periods:
+          - start_date: 1514761200
+            end_date: 1523224800
+      - name: 'france'
+        periods:
+          - start_date: 1514761200
+            end_date: 1523224800
+      - name: 'netherlands'
+        periods:
+          - start_date: 1514761200
+            end_date: 1523224800
+      - name: 'norway'
+        periods:
+          - start_date: 1514761200
+            end_date: 1523224800
+      - name: 'sweden'
+        periods:
+          - start_date: 1514761200
+            end_date: 1523224800
+      - name: 'switzerland'
+        periods:
+          - start_date: 1514761200
+            end_date: 1523224800
+      - name: 'czech_republic'
+        periods:
+          - start_date: 1514761200
+            end_date: 1523224800
+      - name: 'germany'
+        periods:
+          - start_date: 1514761200
+            end_date: 1523224800
+      - name: 'italy'
+        periods:
+          - start_date: 1514761200
+            end_date: 1523224800
+      - name: 'slovenia'
+        periods:
+          - start_date: 1514761200
+            end_date: 1523224800
+      - name: 'hungary'
+        periods:
+          - start_date: 1514761200
+            end_date: 1523224800
+model:
+  name: 'predictor'
+  predictor_type: 'recurrent_net'
+  action: 'train'
+  loss: 'lodl'
+  sequence_length: 96
+  prediction_steps: 96
+  two_d: False
+  use_time_features: True
+  sin_cos_encoding: True
+  dt: 0.25
+  sigma_vec:
+    - 0.1
+    - 0.1
+    - 0.05
+  n_iters: 24
+  max_surrogates: 5000
+  use_clusters: False
+  n_clusters: 100
+  rank: 6
+  gamma: 1.1
+  kwargs:
+    input_size: 9
+    output_size: 288 # 96 * 3
+    early_stopping: True
+    epochs: 200
+    batches_per_epoch: 500
+    val_batches: 50
+    noise_std: 0.0
+    scale_std: 0.0
+    rnn_type: 'LSTM'
+    hidden_units: 256
+    num_layers: 4
+    dropout: 0.3
+    learning_rate: 0.0008
+    batch_size: 256
+    seed: 42
+    verbose: True
+    device: 'cuda'
+environment:
+  battery:
+    efficiency: 0.95
+    capacity: 20000
+    max_power: 8000
+  scaling_method: "none"
+  random_time_init: false
+  init_time: 1514761200
+  episode_length: 172800
+  action_space_type: 'continuous'
+  tax: 20
+  prediction_horizon: 0
+  dataset_args:
+    building: "opsd_building_6"
+    price: "germany"
